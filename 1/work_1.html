@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>List of friends</title>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+        <h1>List of my friends</h1>
+
+        <ul id="list" class="list-group">
+          <li class="list-group-item">Example</li>
+        </ul>
+    </div>
+    <script>
+
+      // Написать функцию map, которая будет принимать в качестве
+      // аргумента массив arr и функцию, которая в свою очередь будет
+      // осуществлять преобразование массива arr  в вид
+      // [ "<li class="list-group-item">Tom</li>", ....]
+      // и выводить элементы массива в ul с id="list"
+      // Вывод должен осуществляться в отсортированном по алфавиту виде
+
+      // --> Умение запутать с постановкой задачи: 5 из 5
+
+      let arr = ["Tom", "Steve", "Bill", "Rita", "Pete", "Ashley"];
+      const list = document.getElementById('list');
+
+      // Сигнатура map
+      function map(list, fn){
+        list.sort();
+
+        for (let element of list) {
+          fn(element);
+        }
+      }
+
+      // Clearing the list element
+      list.innerHTML = '';
+
+      map(arr, element => list.insertAdjacentHTML('beforeend', `<li class="list-group-item">${element}</li>`));
+      
+    </script>
+  </body>
+</html>
