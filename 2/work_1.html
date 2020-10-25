@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Work 1</title>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <style>
+      li {
+        font-size: 22px;
+      }
+      li:hover {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mb-5 text-center">Work 1</h1>
+      <div class="row">
+        <div class="col-sm-3">
+          <ul id="list" class="list-group">
+            <li class="list-group-item text-center">1</li>
+            <li class="list-group-item text-center">2</li>
+            <li class="list-group-item text-center">3</li>
+            <li class="list-group-item text-center">4</li>
+            <li class="list-group-item text-center">5</li>
+          </ul>
+        </div>
+      </div>
+
+      <script>
+        /*
+          При клике на любой элемент li мы в alert() получаем цифру 5
+          а по логике должны получать номер элемента на который кликнули
+
+          Задачи
+            1. С помощью debugger проанализировать почему так получается 
+            2. С помощью замыкания сделать так, чтобы при клике на элемент
+              li получали его номер (let НЕ ИСПОЛЬЗОВАТЬ)
+            3. Выполнить задачу 2 но при этом используя объявление
+              итерационной переменной через let 
+        */
+
+        const list = document.getElementById("list"),
+              els = list.getElementsByTagName("li");
+
+        // without let 1
+        function assignHandler(i) {
+          return function() {
+            alert(i);
+          }
+        }
+
+        for (var i = 0, len = els.length; i < len; i++) {
+          els[i].onclick = assignHandler(i);
+        }
+
+        // // without let 2
+        // for (var i = 0, len = els.length; i < len; i++) {
+        //   (function() {
+        //     var j = i;
+        //     els[j].onclick = function() {
+        //       alert(j);
+        //     };
+        //   })();
+        // }
+
+        // // with let
+        // for (let i = 0, len = els.length; i < len; i++) {
+        //   els[i].onclick = function() {
+        //     alert(i);
+        //   };
+        // }
+
+      </script>
+    </div>
+  </body>
+</html>
