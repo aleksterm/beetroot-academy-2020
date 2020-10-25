@@ -29,9 +29,11 @@
 
       // Сигнатура map
       function map(list, fn){
-        list.sort();
+        const newList = list.slice();
+        
+        newList.sort();
 
-        for (let element of list) {
+        for (let element of newList) {
           fn(element);
         }
       }
