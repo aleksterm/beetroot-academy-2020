@@ -18,12 +18,16 @@
 
       function filter(arr, fn) {
         const newArr = [];
+        
+        // for (let i of arr) {
+        //   if (fn(i)) {
+        //     newArr.push(i);
+        //   }
+        // }
 
-        for (let i of arr) {
-          if (fn(i)) {
-            newArr.push(i);
-          }
-        }
+        arr.forEach(item => {
+          fn(item) ? newArr.push(item) : null;
+        });
 
         return newArr;
       }
