@@ -38,6 +38,7 @@ module.exports =  (env = {mode: 'development'})  => {
                     url: false
                   }
                 },
+                // SASS
                 {
                   loader: "sass-loader"
                 }
@@ -45,6 +46,8 @@ module.exports =  (env = {mode: 'development'})  => {
             }
           ]
         },
+        // CSS minification
+        // this section works only in production mode
         optimization: {
           minimize: true,
           minimizer: [
