@@ -45,7 +45,7 @@ const UserList = props => {
         setError(error);
       }
     )
-  }, [])
+  }, [props.count])
   
 
   if (error) {
