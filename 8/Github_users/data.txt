@@ -1,0 +1,32 @@
+gaearon, sophiebits, bvaughn, kentcdodds
+
+https://api.github.com/users/NAME
+
+=================== html
+
+<div className="container">
+
+  <div className="form-box">
+    <div className="form-box__item">
+        <input type="text" />
+        <button>Add user</button>
+    </div>
+  </div>
+
+  <div className="cart-box">
+    <div className="cart">
+        <h3></h3>
+        <p></p>
+        <img src="" />
+    </div>
+  </div>
+</div>
+
+
+========================================= 
+const data = [
+    {id: 1, name: 'Dan Abramov', login: 'gaearon',  avatar_url: 'https://avatars0.githubusercontent.com/u/810438?v=4'},
+    {id: 2, name: 'Sophie Alpert', login: 'sophiebits', avatar_url: 'https://avatars2.githubusercontent.com/u/6820?v=4'}
+    {id: 3, name: 'Brian Vaughn', login: 'bvaughn', avatar_url: 'https://avatars2.githubusercontent.com/u/199471?v=4'}
+];
+
