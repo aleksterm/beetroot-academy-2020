@@ -1,45 +1,33 @@
-import React, {Component} from 'react'
+import React, { useState } from 'react'
 import Item from './Item';
 import Filter from './Filter';
 
-class ListItems extends Component {
-    state = {
-        searchTerm: "",
-    }
+const ListItems = ({ items, removeItem, toggleItem, title }) => {
+  const [search, setSearch] = useState("");
 
-    updateSearchTerm = event => {
-        this.setState({ searchTerm: event.target.value });
-    }
+  const updateSearchTerm = event => {
+    setSearch(event.target.value);
+  }
 
-    get getBody() {
-        const { searchTerm } = this.state;
-        const { items, removeItem, toggleItem } = this.props;
+  return (
+    <section>
+        <h3 className='mb-3'>{title}</h3>
+        <Filter searchTerm={search} onChange={updateSearchTerm} />
 
-        return items
-            .filter(item => item.value.toLowerCase().includes(searchTerm.toLowerCase()))
+        <ul className='list-group mb-3'>
+          {items
+            .filter(item => item.value.toLowerCase().includes(search.toLowerCase()))
             .map(item => (
-                <Item
-                    key={item.id}
-                    item={item}
-                    removeItem={removeItem}
-                    toggleItem={toggleItem}
-                />
-            ))
-    }
-
-    render() {
-        const { searchTerm } = this.state;
-        const { title } = this.props;
-
-        return (
-            <section>
-                <h3 className='mb-3'>{title}</h3>
-                <Filter searchTerm={searchTerm} onChange={this.updateSearchTerm} />
-
-                <ul className='list-group mb-3'>{this.getBody}</ul>
-            </section>
-        )
-    }
+              <Item
+                  key={item.id}
+                  item={item}
+                  removeItem={removeItem}
+                  toggleItem={toggleItem}
+              />
+            ))}
+        </ul>
+    </section>
+  )
 }
 
 export default ListItems;
