@@ -66,18 +66,24 @@
         }
       }
 
-      const Cart = ({ profile }) => (
+      const Cart = ({ profile, handleUserDelete }) => (
               <div className="cart">
                 <h3>{profile.name}</h3>
                 <p>{profile.login}</p>
                 <img src={profile.avatar_url} alt="https://placehold.it/75"/>
+                <button onClick={() => handleUserDelete(profile.id)}
+                >Delete user</button>
               </div>
       )
       
-      const CartList = ({ data }) => (
+      const CartList = ({ data, handleUserDelete }) => (
               <div className="cart-box">
                 {data.map(profile => (
-                  <Cart key={profile.id} profile={profile} />
+                  <Cart
+                    key={profile.id}
+                    profile={profile}
+                    handleUserDelete={handleUserDelete}
+                  />
                 ))}
               </div>
       )
@@ -94,11 +100,20 @@
           this.setState({ data: [...this.state.data, user] });
         }
 
+        deleteUser = userId => {
+          this.setState({
+            data: [...this.state.data.filter(user => user.id !== userId)]
+          })
+        }
+
         render() {
           return (
                   <div className="container">
                     <Form submit={this.addUser} />
-                    <CartList data={this.state.data}/>
+                    <CartList
+                      data={this.state.data}
+                      handleUserDelete={this.deleteUser}
+                    />
                   </div>
           )
         }
