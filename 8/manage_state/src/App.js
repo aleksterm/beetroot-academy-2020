@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { defaultState } from './data';
 import ListItems from './components/ListItems';
 import NewItem from './components/NewItem';
+import ErrorBoundary from '../src/components/ErrorBoundary';
 
 const App = () => {
   const [items, setItems] = useState(defaultState);
@@ -32,30 +33,37 @@ const App = () => {
 
   return (
       <div className='container py-3'>
-          <h2>TODO list:</h2>
-          <br/>
+        <h2>TODO list:</h2>
+        <br/>
+        
+        <ErrorBoundary>
           <NewItem addItem={addItem} />
-
-          <div className='row'>
-              <div className='col-md-5'>
-                  <ListItems
-                      title="Active items"
-                      items={unpackedItems}
-                      toggleItem={toggleItem}
-                      removeItem={removeItem}
-                  />
-              </div>
-              <div className='offset-md-2 col-md-5'>
-                  <ListItems
-                      title="Completed items"
-                      items={packedItems}
-                      toggleItem={toggleItem}
-                      removeItem={removeItem}
-                  />
-              </div>
+        </ErrorBoundary>
+        
+        <div className='row'>
+          <div className='col-md-5'>
+            <ErrorBoundary>
+              <ListItems
+                  title="Active items"
+                  items={unpackedItems}
+                  toggleItem={toggleItem}
+                  removeItem={removeItem}
+              />
+            </ErrorBoundary>
           </div>
-          <button className='btn btn-success btn-lg btn-block' onClick={markAllPacked}>Mark all as packed</button>
-          <button className='btn btn-danger btn-lg btn-block' onClick={markAllUnPacked}>Mark all as unpacked</button>
+          <div className='offset-md-2 col-md-5'>
+            <ErrorBoundary>
+              <ListItems
+                  title="Completed items"
+                  items={packedItems}
+                  toggleItem={toggleItem}
+                  removeItem={removeItem}
+              />
+            </ErrorBoundary>
+          </div>
+        </div>
+        <button className='btn btn-success btn-lg btn-block' onClick={markAllPacked}>Mark all as packed</button>
+        <button className='btn btn-danger btn-lg btn-block' onClick={markAllUnPacked}>Mark all as unpacked</button>
       </div>
   )
 }
