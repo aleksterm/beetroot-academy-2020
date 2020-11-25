@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import "./Item.css";
 import { AppContext } from "../App";
 
@@ -34,4 +34,4 @@ const Item = ({ item }) => {
   );
 }
 
-export default memo(Item);
+export default Item;
