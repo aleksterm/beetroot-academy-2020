@@ -1,10 +1,14 @@
-import React, { useState } from "react"
-import PropTypes from 'prop-types'
-import Featured from './Featured'
+import React, { useState, useContext } from "react";
+import PropTypes from 'prop-types';
+import Featured from './Featured';
+import {AppContext} from '../App';
 
 const FilmCard = ({film}) => {
   const [isDescOpened, setIsDescOpened] = useState(false);
-
+  const {editFilm, deleteFilm} = useContext(AppContext);
+  const [confirm, setConfirm] = useState(false);
+  const showConfirm = () => setConfirm(true);
+  const hideConfirm = () => setConfirm(false);
   const toggleDescription = () => setIsDescOpened(!isDescOpened);
 
   return (
@@ -45,6 +49,27 @@ const FilmCard = ({film}) => {
           <i className={`icon link eye ${isDescOpened && 'slash'}`} onClick={toggleDescription} />
         </div>
       </div>
+      <div className="extra content">
+        {confirm ? (
+          <div className="ui two buttons">
+            <span  className="ui red basic button"  onClick={() => deleteFilm(film)}>
+              <i className="ui icon check" /> YES
+            </span>
+            <span className="ui grey basic button" onClick={hideConfirm}>
+              <i className="ui icon trash" /> NO
+            </span>
+          </div>
+          ) : (
+          <div className="ui two buttons">
+            <span  className="ui green basic button"  onClick={() => editFilm(film)}>
+              <i className="ui icon edit" />
+            </span>
+            <span className="ui red basic button" onClick={showConfirm}>
+              <i className="ui icon trash" />
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -57,7 +82,7 @@ FilmCard.propTypes = {
     duration: PropTypes.number.isRequired,
     price: PropTypes.number.isRequired,
     featured: PropTypes.bool.isRequired,
-  })
+  }).isRequired,
 }
 
 export default React.memo(FilmCard)
