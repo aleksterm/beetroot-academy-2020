@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React, {useState, useEffect} from "react"
 import AdminRoute from '../components/AdminRoute'
 import api from "../api"
 import FilmsList from "./films"
@@ -6,107 +6,98 @@ import {AppContext} from './App'
 import FilmForm from "./forms/FilmForm"
 import {orderBy, find} from 'lodash';
 
-class FilmsPage extends Component {
-    state = {
-        films: [],
-        isLoading: true,
-    }
+const FilmsPage = ({user, location}) => {
+  const [films, setFilms] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  // const [showAddForm, setShowAddForm] = useState(false);
+  const numCol = location.pathname === "/films" ? "sixteen" : "ten"
 
-    componentDidMount() {
-        api.films
-            .fetchAll()
-            .then(films =>
-                this.setState({films: this.sortFilms(films), isLoading: false}),
-            )
-    }
+  const sortFilms = films => orderBy(films, ["featured", "title"], ["desc", "asc"])
 
+  const toggleFeatured = id => {
+    const film = find(films, {_id: id})
 
-    sortFilms = films => orderBy(films, ["featured", "title"], ["desc", "asc"])
+    return updateFilm({...film, featured: !film.featured})
+  }
 
-    toggleFeatured = id => {
-        const film = find(this.state.films, {_id: id})
+  const saveFilm = film => film._id ? updateFilm(film) : addFilm(film);
 
-        return this.updateFilm({...film, featured: !film.featured})
-    }
+  const addFilm = filmData => 
+    api.films.create(filmData)
+      .then(film => setFilms(sortFilms([...films, {...film}])))
+      // .then(() => setShowAddForm(false))
 
-    saveFilm = film => (film._id ? this.updateFilm(film) : this.addFilm(film))
+  const updateFilm = filmData => 
+    api.films.update(filmData)
+      .then(film => {
+        setFilms(sortFilms(films
+        .map(item => item._id === film._id ? film : item)
+      ))})
+      // .then(() => setShowAddForm(false))
 
-    addFilm = filmData =>
-        api.films.create(filmData).then(film =>
-            this.setState(({films}) => ({
-                films: this.sortFilms([...films, {...film}]),
-                showAddForm: false,
-            })),
-        )
+  const deleteFilm = film => {
+    api.films.delete(film)
+      .then(() => setFilms(sortFilms(films
+        .filter(item => item._id !== film._id)
+      )))
+  }
 
-    updateFilm = filmData =>
-        api.films.update(filmData).then(film =>
-            this.setState(({films}) => ({
-                films: this.sortFilms(
-                    films.map(item => (item._id === film._id ? film : item)),
-                ),
-                showAddForm: false,
-            })),
-        )
+  useEffect(() => {
+    api.films.fetchAll()
+      .then(filmsData => {
+        setFilms(sortFilms(filmsData));
+        setIsLoading(false);
+      })
+  }, [])
 
-    deleteFilm = film =>
-        api.films.delete(film).then(() =>
-            this.setState(({films}) => ({
-                films: this.sortFilms(films.filter(item => item._id !== film._id)),
-            })),
-        )
+  return (
+    <AppContext.Provider
+      value={{
+        toggleFeatured: toggleFeatured,
+        deleteFilm: deleteFilm,
+        user: user,
+      }}
+    >
+      <div className="ui stackable grid">
+        <AdminRoute 
+          path="/films/new"
+          user={user}
+          render={() => (
+            <div className="six wide column">
+              <FilmForm submit={saveFilm} film={{}} />
+            </div>
+          )}
+        />
+        <AdminRoute
+          path="/films/edit/:_id"
+          user={user}
+          render={({match}) => (
+            <div className="six wide column">
+              <FilmForm
+                submit={saveFilm}
+                film={find(films, {_id: match.params._id}) || {} }
+              />
+            </div>
+          )}
+        />
 
-    render() {
-        const numCol = this.props.location.pathname === "/films" ? "sixteen" : "ten"
-
-        return (
-            <AppContext.Provider
-                value={{
-                    toggleFeatured: this.toggleFeatured,
-                    deleteFilm: this.deleteFilm,
-                    user: this.props.user,
-                }}
-            >
-                <div className="ui stackable grid">
-                    <AdminRoute  path="/films/new"
-                                 user={this.props.user}
-                                 render={() => (
-                                     <div className="six wide column">
-                                         <FilmForm submit={this.saveFilm} film={{}} />
-                                     </div>
-                                 )}
-                    />
-
-                    <AdminRoute  path="/films/edit/:_id"
-                                 user={this.props.user}
-                                 render={({match}) => (
-                                     <div className="six wide column">
-                                         <FilmForm  submit={this.saveFilm}
-                                                     film={find(this.state.films, {_id: match.params._id}) || {}}
-                                         />
-                                     </div>
-                                 )}
-                    />
-
-
-                    <div className={`${numCol} wide column`}>
-                        {
-                            this.state.loading ? (
-                                <div className="ui icon message">
-                                    <i className="notched circle loading icon" />
-                                    <div className="content">
-                                        <div className="header">films loading</div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <FilmsList films={this.state.films} editFilm={this.selectFilmForEdit} deleteFilm={this.deleteFilm} />
-                            )
-                        }
-                    </div>
+        <div className={`${numCol} wide column`}>
+          {
+            isLoading ? (
+              <div className="ui icon message">
+                <i className="notched circle loading icon" />
+                <div className="content">
+                  <div className="header">films loading</div>
                 </div>
-            </AppContext.Provider>
-        )
-    }
+              </div>
+            ) : (
+              <FilmsList films={films} deleteFilm={deleteFilm} />
+            )
+          }
+        </div>
+      </div>
+    </AppContext.Provider>
+  )
 }
 
 export default FilmsPage

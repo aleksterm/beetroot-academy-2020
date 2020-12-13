@@ -36,9 +36,10 @@ const FilmForm = props => {
         setErrors(errors)
         if (Object.keys(errors).length === 0) {
             setIsLoading(true)
-            props.submit(data).catch(err =>  {
-                    setErrors(err.response.data.errors)
-                    setIsLoading(false)
+            props.submit(data)
+              .catch(err =>  {debugger
+                setErrors(err.response.data.errors)
+                setIsLoading(false)
             })
             .then(() => setRedirect(true))
         }
