@@ -26,9 +26,9 @@ const FilmCard = React.memo(({film}) => {
             )}
 
             <div className="content">
-                <a href="/" className="header">
+                <Link to={`/film/${film._id}`} className="header">
                     {film.title}
-                </a>
+                </Link>
                 <div className="meta">
                     <i className="icon users" />
                     {film.director}
