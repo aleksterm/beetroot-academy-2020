@@ -88,14 +88,15 @@ class FilmsPage extends Component {
 
                     <Route
                         path='/films/edit/:_id'
-                        render={props => (
+                        render={props => {
+                          return (
                             <div className='six wide column'>
                                 <FilmsForm
                                     submit={this.saveFilm}
-                                    film={find(this.state.films, { _id: props.match.params._id }) }
+                                    film={find(this.state.films, { _id: props.match.params._id }) || {} }
                                 />
                             </div>
-                        )}
+                        )}}
                     />
 
                     <div className={`${numCol} wide column`}>
