@@ -9,3 +9,8 @@ export const addBookAction = book => ({
     type: C.ADD_BOOK,
     payload: book
 })
+
+export const editBookAction = book => ({
+  type: C.EDIT_BOOK,
+  payload: book
+})

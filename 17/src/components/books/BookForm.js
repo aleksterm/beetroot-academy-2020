@@ -1,12 +1,19 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { connect } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
 import Select from 'react-select'
 import { mapToArr} from "../../utils"
 import {Redirect} from 'react-router-dom'
-import {addBookAction} from '../../ac/booksAction'
+import {addBookAction, editBookAction} from '../../ac/booksAction'
+import {booksSelector} from '../../selectors/booksSelector'
+import {find} from 'lodash'
 
-const BookForm = ({categories, addBookAction}) => {
+const BookForm = ({match, books, categories, addBookAction, editBookAction}) => {
+    let currentBook;
+    if (match.params.id) {
+      currentBook = find(books, item => item._id === match.params.id);
+    }
+
     const [redirect, setRedirect] = useState(false)
     const { register, handleSubmit, errors, control, setError, getValues } = useForm()
     const options = [{value: '-1', label: 'Choose category'}]
@@ -16,16 +23,25 @@ const BookForm = ({categories, addBookAction}) => {
         e.preventDefault()
 
         if (errors.categoryId) {
-            setError('categoryId')
+            setError('categoryId', errors.categoryId)
 
             return
         }
 
         data = {...data, categoryId: data.categoryId.value}
 
-        addBookAction(data)
+        if (currentBook) {
+          editBookAction({_id: currentBook._id, ...data});
+        } else {
+          addBookAction(data);
+        }
+
         setRedirect(true)
     }
+
+    useEffect(() => {
+      register({name: 'categoryId'}, {required: true});
+    }, [register])
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="col-md-5">
@@ -38,6 +54,7 @@ const BookForm = ({categories, addBookAction}) => {
                     type="text"
                     className="form-control"
                     ref={register({ required: true })}
+                    defaultValue={currentBook ? currentBook.title : ''}
                 />
                 {errors.title && "Title is required."}
             </div>
@@ -49,16 +66,16 @@ const BookForm = ({categories, addBookAction}) => {
                     type="text"
                     className="form-control"
                     ref={register({ required: true })}
+                    defaultValue={currentBook ? currentBook.desc : ''}
                 />
                 {errors.desc && "Description  is required."}
             </div>
             <Controller
                 as={<Select options={options}/>}
                 control={control}
-                ref={{ required: true}}
                 onChange={([selected]) => selected }
                 name={'categoryId'}
-                defaultValue={options[0]}
+                defaultValue={currentBook ? options[currentBook.categoryId] : options[0]}
             />
             {errors.categoryId && 'Categories  is required.'}
 
@@ -79,10 +96,12 @@ const BookForm = ({categories, addBookAction}) => {
 
 function mapStateToProps(state) {
     const {categories} = state.categoriesBooks
+    const books = booksSelector(state);
 
     return {
-        categories: mapToArr(categories)
+        categories: mapToArr(categories),
+        books
     }
 }
 
-export default connect(mapStateToProps, {addBookAction})(BookForm)
+export default connect(mapStateToProps, {addBookAction, editBookAction})(BookForm)

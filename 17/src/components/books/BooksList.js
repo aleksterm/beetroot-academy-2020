@@ -18,7 +18,7 @@ BooksList.propTypes = {
 
 function mapStateToProps(state) {
     const { categoriesBooks, books } = state;
-debugger
+
     return {
         books: categoriesBooks.selectedCategory
         ? books.filter(book => book.categoryId === categoriesBooks.selectedCategory)

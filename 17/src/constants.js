@@ -2,4 +2,5 @@ export default {
     SELECT_BOOK: 'SELECT_BOOK',
     SELECT_CATEGORY: 'SELECT_CATEGORY',
     ADD_BOOK: 'ADD_BOOK',
+    EDIT_BOOK: 'EIDT_BOOK',
 }

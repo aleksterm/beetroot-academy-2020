@@ -1,11 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 import {selectBook} from '../../ac'
 
-const Book = ({book, isActive, toggle, category}) => (
+const Book = ({book, isActive, toggle, editBook, category}) => (
     <li className={'list-group-item'}>
         <h2 onClick={toggle}>{book.title}</h2>
+        <Link to={`/edit-book/${book._id}`} className="btn btn-secondary float-right">
+          Edit
+        </Link>
         <p>Category: {category.title}</p>
         {isActive && <p>{book.desc}</p>}
     </li>
