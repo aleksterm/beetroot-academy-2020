@@ -1,0 +1,15 @@
+import React from 'react'
+import {Link} from 'react-router-dom'
+
+const HomePage = props => (
+    <div className={'jumbotron container mt-5'}>
+        <h1>Courses administration</h1>
+        <p>Learn Redux</p>
+
+        <Link to='/about' className='btn btn-primary btn-lg'>
+            About Page
+        </Link>
+    </div>
+)
+
+export default HomePage
