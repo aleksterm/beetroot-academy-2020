@@ -10,9 +10,10 @@ const store = configureStore()
 window.store = store
 
 ReactDOM.render(
-    <Provider store={store}>
-        <Router>
-            <App />
-        </Router>
-    </Provider>
-    , document.getElementById("root"));
+  <Provider store={store}>
+    <Router>
+      <App />
+    </Router>
+  </Provider>,
+  document.getElementById("root")
+);

@@ -1,0 +1,37 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+
+const SelectInput = ({name, label, handleChange, defaultOption, value, options, error}) => {
+    return (
+        <div className={'form-group'}>
+            <label htmlFor={name}>{label}</label>
+            <div className={'field'}>
+                <select
+                    name={name}
+                    value={value}
+                    onChange={handleChange}
+                    className={'form-control'}
+                >
+                    <option value="-1">{defaultOption}</option>
+                    {options.map(o => (
+                        <option key={o.value} value={o.value}>{o.text}</option>
+                    ))}
+                </select>
+            </div>
+
+            {error && <div className={'error text-danger'}>{error}</div>}
+        </div>
+    )
+}
+
+SelectInput.propTypes = {
+    name: PropTypes.string.isRequired,
+    label: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    options: PropTypes.arrayOf(PropTypes.object),
+    defaultOption: PropTypes.string.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    error: PropTypes.string,
+}
+
+export default SelectInput

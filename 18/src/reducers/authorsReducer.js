@@ -5,7 +5,6 @@ export default function(state = [], action) {
 
     switch(type) {
         case C.LOAD_AUTHOR_SUCCESS: {
-            debugger
             return payload
         }
 

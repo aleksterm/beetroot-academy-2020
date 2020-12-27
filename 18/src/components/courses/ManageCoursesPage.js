@@ -88,7 +88,6 @@ ManageCoursesPage.defaultProps = {
 }
 
 function mapStateToProps({courses, authors, counter}) {
-    debugger
     return {
         courses: authors.length === 0 ? [] : courses,
         authors,
@@ -96,4 +95,9 @@ function mapStateToProps({courses, authors, counter}) {
     }
 }
 
-export default connect(mapStateToProps, {createCourseAction, loadCoursesAction, loadAuthorsAction, counterAction})(ManageCoursesPage)
+export default connect(mapStateToProps, {
+  createCourseAction,
+  loadCoursesAction,
+  loadAuthorsAction,
+  counterAction
+})(ManageCoursesPage)

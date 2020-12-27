@@ -1,8 +1,11 @@
-import C from '../constants'
-import * as authorApi from '../api/authorApi'
+import C from "../constants"
+import * as authorApi from "../api/authorApi"
+import {beginApiCall, apiCallError} from "./apiStatusActions";
 
 export function loadAuthorsAction() {
     return function(dispatch) {
+        dispatch(beginApiCall())
+
         return authorApi
             .getAuthors()
             .then(authors => {
@@ -12,6 +15,7 @@ export function loadAuthorsAction() {
                 })
             })
             .catch(err => {
+                dispatch(apiCallError(err))
                 throw err
             })
     }
